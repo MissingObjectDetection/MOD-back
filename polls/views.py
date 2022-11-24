@@ -6,4 +6,5 @@ import numpy as np
 def index(request):
     test = np.arange(0, 5)
     res = "Numpy Test(np.arange(0, 5)): " + str(test)
-    return HttpResponse(res)
+    res2 = "Hello World!" + res
+    return HttpResponse(res2)
