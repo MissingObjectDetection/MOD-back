@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		
+	</head>
+	<body>
+		What chat room would you like to enter?<br/>
+		<input id="room-name-input" type="text" size="100"/><br/>
+		<input id="room-name-submit" type="button" value="Enter"/>
+		<input id="btn_send" type="button" value="Request to Server"/>
+
+		<script>
+			document.querySelector("#room-name-input").focus();
+			document.querySelector("#room-name-input").addEventListener("keyup", (e) => {
+							if(e.keyCode === 13){
+										document.querySelector("#room-name-submit").click();
+										}
+						});
+			document.querySelector("#room-name-submit").addEventListener("click", (e) => {
+							let roomName = document.querySelector("#room-name-input").value;
+							window.location.pathname = `/mod/${roomName}/`;
+						});
+		</script>
+		<div class="container">
+			<div class="row">
+				<div class="col-6 mx-auto mt-5">
+					<h1 id="app">{{ text }}</h1>
+				</div>
+			</div>
+		</div>
+
+		<script>
+			var url = 'ws://'+window.location.host + '/ws/some_url/';
+			var socket = new WebSocket(url);
+			
+			socket.onclose = function(event){
+				document.querySelector('#app').innerText = 'socket is disconnected';
+						}
+			socket.onmessage = function(event){
+				var data = JSON.parse(event.data);
+							console.log(data);
+							document.querySelector('#app').innerText = data.message;
+						};
+			document.getElementById("btn_send").onclick = function(event){
+				console.log("click");
+							if(socket.readyState === socket.OPEN){
+											var value = document.querySelector("#room-name-input").value;
+					socket.send(value);
+											console.log("send");
+							}
+						};
+		</script>
+		<form method="POST" action="{% url 'upload' %}" enctype="multipart/form-data">
+			{% csrf_token %}
+			<input type="file" accept="video/*"  name="video">
+			<input type="submit" value="upload">
+		</form>
+	</body>
+</html>

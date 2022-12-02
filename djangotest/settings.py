@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,21 +26,28 @@ SECRET_KEY = 'django-insecure-7)!p!s1+0f=xa83(-nmo+1&!^-afp@i@7dx+uvox7i--e0k_hw
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["3.37.88.218"]
+ALLOWED_HOSTS = ["3.37.87.189"]
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
+    'daphne',
+    'mod',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'polls.apps.PollsConfig',
+    'corsheaders'
+    # 'mod.apps.ModConfig'
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -51,10 +59,13 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'djangotest.urls'
 
+#CORS_ORIGIN_WHITELIST = ('http://3.37.87.189:80')
+CORS_ALLOW_CREDENTIALS = True
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR.joinpath('templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -69,6 +80,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'djangotest.wsgi.application'
 
+CHANNEL_LAYERS = {
+        'default': {
+            'BACKEND' : 'channels_redis.core.RedisChannelLayer',
+            'CONFIG': {
+                "hosts" : [('3.37.87.189', 6379)],
+        },
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
@@ -109,15 +128,26 @@ TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_DIR = os.path.join(BASE_DIR, 'mod', 'static')
+STATICFILES_DIRS = [
+     STATIC_DIR,
+]
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+ASGI_APPLICATION = 'djangotest.asgi.application'
