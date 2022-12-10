@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404, JsonResponse
 from django.core import serializers
 from .models import MediaModel
+from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
+from django.utils.decorators import method_decorator
 
 # Create your views here.
 def index(request):
@@ -12,9 +14,12 @@ def index(request):
 #            'room_name': room_name
 #            })
 
+@csrf_exempt
+#@method_decorator(ensure_csrf_cookie, name='dispatch')
 def upload(request):
     if request.method == 'POST':
         media = MediaModel()
+        print(request.META)
         media.video = request.FILES['video']
         media.original_file_name = request.FILES['video'].name
         media.filesize = request.META['CONTENT_LENGTH']

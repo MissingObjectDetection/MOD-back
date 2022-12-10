@@ -31,7 +31,7 @@
 		</div>
 
 		<script>
-			var url = 'ws://'+window.location.host + '/ws/some_url/';
+			var url = 'ws://'+window.location.host + '/ws/detect/';
 			var socket = new WebSocket(url);
 			
 			socket.onclose = function(event){
@@ -52,7 +52,7 @@
 						};
 		</script>
 		<form method="POST" action="{% url 'upload' %}" enctype="multipart/form-data">
-			{% csrf_token %}
+			<!--{% csrf_token %}-->
 			<input type="file" accept="video/*"  name="video">
 			<input type="submit" value="upload">
 		</form>

@@ -27,8 +27,6 @@ SECRET_KEY = 'django-insecure-7)!p!s1+0f=xa83(-nmo+1&!^-afp@i@7dx+uvox7i--e0k_hw
 DEBUG = True
 
 ALLOWED_HOSTS = ["3.37.87.189"]
-
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -60,7 +58,13 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'djangotest.urls'
 
 #CORS_ORIGIN_WHITELIST = ('http://3.37.87.189:80')
+CORS_ORIGIN_WHITELIST = ["http://3.37.87.189"]
 CORS_ALLOW_CREDENTIALS = True
+
+CSRF_TRUSTED_ORIGINS = ["http://3.37.87.189"]
+
+CSRF_COOKIE_NAME = 'XSRF-TOKEN'
+CSRF_HEADER_NAME = 'HTTP-X-CSRF-TOKEN'
 
 TEMPLATES = [
     {

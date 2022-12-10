@@ -3,6 +3,7 @@ import json
 from random import randint
 from time import sleep
 from . import multi
+from threading import Thread
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -40,10 +41,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=json.dumps({ 'message': message }))
 
 
-class WSConsumer(WebsocketConsumer):
+class DetectConsumer(WebsocketConsumer):
     def connect(self):
         self.accept()
-
+        
         # for i in range(1000):
         self.send(json.dumps({'message':randint(1, 100)}))
            # sleep(1)
@@ -52,12 +53,14 @@ class WSConsumer(WebsocketConsumer):
        # text_data_json = json.loads(text_data)
         message = text_data
         print(message)
-        multi.running_test(self)
+        th1 = Thread(target=multi.running_test, args=(self,))
+        th1.start()
+        #await multi.running_test(self)
         self.send(text_data=json.dumps({
             'message' : 'server: '+message
             })
             )
-        self.close()
+        #self.close()
 
     def chat_message(self, event):
         print("Event Trigered")
